@@ -51,15 +51,10 @@ class TtbarP4(supy.wrappedChain.calculable) :
     def update(self, _) :
         self.value = self.source[self.top] + self.source[self.antitop]
 
-#class BoostToCM(supy.wrappedChain.calculable) :
-#    "LorentzVector::BoostToCM"
-#    def __init__(self, p4=''):
-#        self.p4 = p4
-#    def update(self, _) :
-#        p4 = self.source[self.p4]
-#        self.value = p4.BoostToCM()
-#class BetaZ(supy.wrappedChain.calculable) :
-#    def __init__(self, boost=''):
-#        self.boost = boost
-#    def update(self, _) :
-#        return self.source[self.boost].z()
+class BoostZ(supy.wrappedChain.calculable) :
+    "LorentzVector::BoostToCM -> z"
+    def __init__(self, p4='TtbarP4'):
+        self.p4 = p4
+    def update(self, _) :
+        p4 = self.source[self.p4]
+        self.value = p4.BoostToCM().z()
