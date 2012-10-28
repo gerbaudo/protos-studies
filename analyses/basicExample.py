@@ -7,8 +7,15 @@ class basicExample(supy.analysis) :
             supy.steps.printer.progressPrinter(),
             supy.steps.histos.value('n_jets',20, 0, 20),
             supy.steps.histos.value('top_ene',20,0,1e4),
+            #supy.steps.histos.energy("top_P4", 20,0,1e4), # just to verify that P4 is consistent with ntuple
             supy.steps.histos.pt("top_P4", 100,1,201),
             supy.steps.histos.pt("jet_P4", 100,1,201, indices = 'Indicesjet_'),
+            supy.steps.histos.eta("top_P4", 100,-10,10),
+            supy.steps.histos.eta("antitop_P4", 100,-10,10),
+            supy.steps.histos.absEta("top_P4", 100,10,10),
+            supy.steps.histos.absEta("antitop_P4", 100,10,10),
+            supy.steps.histos.pt('TtbarP4', 50,0,+0.05e-4),
+            supy.steps.histos.mass('TtbarP4', 100,0,2e3),
             ]
 
 
@@ -36,6 +43,7 @@ class basicExample(supy.analysis) :
                  +[calculables.kinematic.P4(collection = ("jet_",""))]
                  +[calculables.kinematic.singleP4(collection = ("top_",""))]
                  +[calculables.kinematic.singleP4(collection = ("antitop_",""))]
+                 +[calculables.kinematic.TtbarP4()]
                  )
 
     def listOfSampleDictionaries(self) :
