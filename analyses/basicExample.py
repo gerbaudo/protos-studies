@@ -1,4 +1,4 @@
-import supy, ROOT as r
+import calculables, supy, ROOT as r
 
 class basicExample(supy.analysis) :
 
@@ -7,11 +7,35 @@ class basicExample(supy.analysis) :
             supy.steps.printer.progressPrinter(),
             supy.steps.histos.value('n_jets',20, 0, 20),
             supy.steps.histos.value('top_ene',20,0,1e4),
+            supy.steps.histos.pt("top_P4", 100,1,201),
+            supy.steps.histos.pt("jet_P4", 100,1,201, indices = 'Indicesjet_'),
             ]
+
+
+# - # list of leaves
+# - ['evt_num', 'truth_qqflag',
+# -  'n_leptons', 'n_photons', 'n_nonisomu', 'n_jets',
+# -  'Wlep_mcid', 'Wlep_px', 'Wlep_py', 'Wlep_pz', 'Wlep_ene',
+# -  'Wnu_mcid', 'Wnu_px', 'Wnu_py', 'Wnu_pz', 'Wnu_ene',
+# -  'Wquark1_mcid', 'Wquark1_px', 'Wquark1_py', 'Wquark1_pz', 'Wquark1_ene',
+# -  'Wquark2_mcid', 'Wquark2_px', 'Wquark2_py', 'Wquark2_pz', 'Wquark2_ene',
+# -  'bottom_px', 'bottom_py', 'bottom_pz', 'bottom_ene',
+# -  'antibottom_px', 'antibottom_py', 'antibottom_pz', 'antibottom_ene',
+# -  'top_px', 'top_py', 'top_pz', 'top_ene',
+# -  'antitop_px', 'antitop_py', 'antitop_pz', 'antitop_ene',
+# -  'met_px', 'met_py',
+# -  # these are vectors
+# -  'lep_mcid', 'lep_px', 'lep_py', 'lep_pz', 'lep_ene',
+# -  'jet_tag', 'jet_px', 'jet_py', 'jet_pz', 'jet_ene']
+
 
     def listOfCalculables(self,config) :
         return ( supy.calculables.zeroArgs(supy.calculables) +
                  [supy.calculables.other.fixedValue('Two',2) ]
+                 +[calculables.other.Indices(collection=("jet_",""))]
+                 +[calculables.kinematic.P4(collection = ("jet_",""))]
+                 +[calculables.kinematic.singleP4(collection = ("top_",""))]
+                 +[calculables.kinematic.singleP4(collection = ("antitop_",""))]
                  )
 
     def listOfSampleDictionaries(self) :
