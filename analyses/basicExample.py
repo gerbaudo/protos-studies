@@ -16,7 +16,8 @@ class basicExample(supy.analysis) :
             supy.steps.histos.absEta("antitop_P4", 100,10,10),
             supy.steps.histos.pt('TtbarP4', 50,0,+0.05e-4),
             supy.steps.histos.mass('TtbarP4', 100,0,2e3),
-            supy.steps.histos.value('AbsSumRapidities', 100,0,10),
+            #supy.steps.printer.printstuff(['BoostZ']),
+            supy.steps.histos.value('BoostZ',100, -1, +1),
             ]
 
 
@@ -45,6 +46,7 @@ class basicExample(supy.analysis) :
                  +[calculables.kinematic.singleP4(collection = ("top_",""))]
                  +[calculables.kinematic.singleP4(collection = ("antitop_",""))]
                  +[calculables.kinematic.TtbarP4(), calculables.kinematic.AbsSumRapidities()]
+                 +[calculables.kinematic.BoostZ()]
                  )
 
     def listOfSampleDictionaries(self) :
