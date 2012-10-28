@@ -36,6 +36,13 @@ class P4(supy.wrappedChain.calculable) :
                                                                     self.source[self.py],
                                                                     self.source[self.pz],
                                                                     self.source[self.ene])]
+class AbsSumRapidities(supy.wrappedChain.calculable) :
+    def __init__(self, top='top_', antitop='antitop_'):
+        self.top = top+'P4'
+        self.antitop = antitop+'P4'
+    def update(self,_) : self.value = abs( self.source[self.top].Rapidity() +
+                                           self.source[self.antitop].Rapidity() )
+
 class TtbarP4(supy.wrappedChain.calculable) :
     "ttbar four momentum"
     def __init__(self, top='top_', antitop='antitop_'):
@@ -43,3 +50,16 @@ class TtbarP4(supy.wrappedChain.calculable) :
         self.antitop = antitop+'P4'
     def update(self, _) :
         self.value = self.source[self.top] + self.source[self.antitop]
+
+#class BoostToCM(supy.wrappedChain.calculable) :
+#    "LorentzVector::BoostToCM"
+#    def __init__(self, p4=''):
+#        self.p4 = p4
+#    def update(self, _) :
+#        p4 = self.source[self.p4]
+#        self.value = p4.BoostToCM()
+#class BetaZ(supy.wrappedChain.calculable) :
+#    def __init__(self, boost=''):
+#        self.boost = boost
+#    def update(self, _) :
+#        return self.source[self.boost].z()
