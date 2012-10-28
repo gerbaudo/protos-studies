@@ -36,3 +36,10 @@ class P4(supy.wrappedChain.calculable) :
                                                                     self.source[self.py],
                                                                     self.source[self.pz],
                                                                     self.source[self.ene])]
+class TtbarP4(supy.wrappedChain.calculable) :
+    "ttbar four momentum"
+    def __init__(self, top='top_', antitop='antitop_'):
+        self.top = top+'P4'
+        self.antitop = antitop+'P4'
+    def update(self, _) :
+        self.value = self.source[self.top] + self.source[self.antitop]
