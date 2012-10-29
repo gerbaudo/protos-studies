@@ -1,9 +1,9 @@
-import calculables, supy, ROOT as r
+import calculables, steps, supy, ROOT as r
 
 class basicExample(supy.analysis) :
 
     def listOfSteps(self,config) :
-        return [
+        stepsList = [
             supy.steps.printer.progressPrinter(),
             supy.steps.histos.value('n_jets',20, 0, 20),
             supy.steps.histos.value('top_ene',20,0,1e4),
@@ -18,7 +18,13 @@ class basicExample(supy.analysis) :
             supy.steps.histos.mass('TtbarP4', 100,0,2e3),
             #supy.steps.printer.printstuff(['BoostZ']),
             supy.steps.histos.value('BoostZ',100, -1, +1),
+            supy.steps.histos.value('DeltaAbsRapidities',50, -3, +3),
+            steps.histos.DeltaAbsYHisto(),
             ]
+        stepsList += [steps.histos.DeltaAbsYHisto(bm, bM)
+                      for bm,bM in [(i*0.2, (i+1)*0.2) for i in range(int(3./0.2))]]
+        return stepsList
+
 
 
 # - # list of leaves
@@ -45,7 +51,9 @@ class basicExample(supy.analysis) :
                  +[calculables.kinematic.P4(collection = ("jet_",""))]
                  +[calculables.kinematic.singleP4(collection = ("top_",""))]
                  +[calculables.kinematic.singleP4(collection = ("antitop_",""))]
-                 +[calculables.kinematic.TtbarP4(), calculables.kinematic.AbsSumRapidities()]
+                 +[calculables.kinematic.TtbarP4(),
+                   calculables.kinematic.AbsSumRapidities(),
+                   calculables.kinematic.DeltaAbsRapidities(),]
                  +[calculables.kinematic.BoostZ()]
                  )
 
@@ -59,7 +67,7 @@ class basicExample(supy.analysis) :
         return [exampleDict]
 
     def listOfSamples(self,config) :
-        test = True
+        test = True #False
         nEventsMax= 10000 if test else None
 
         return (
