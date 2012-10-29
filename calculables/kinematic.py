@@ -42,6 +42,11 @@ class AbsSumRapidities(supy.wrappedChain.calculable) :
         self.antitop = antitop+'P4'
     def update(self,_) : self.value = abs( self.source[self.top].Rapidity() +
                                            self.source[self.antitop].Rapidity() )
+class DeltaAbsRapidities(supy.wrappedChain.calculable) :
+    def __init__(self, top='top_', antitop='antitop_'):
+        self.top = top+'P4'
+        self.antitop = antitop+'P4'
+    def update(self,_) : self.value = abs(self.source[self.top].Rapidity()) - abs(self.source[self.antitop].Rapidity())
 
 class TtbarP4(supy.wrappedChain.calculable) :
     "ttbar four momentum"
