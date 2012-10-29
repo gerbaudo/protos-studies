@@ -3,26 +3,28 @@ import calculables, steps, supy, ROOT as r
 class basicExample(supy.analysis) :
 
     def listOfSteps(self,config) :
+        shv = supy.steps.histos.value
+        shpt, shmass = supy.steps.histos.pt, supy.steps.histos.mass
+        shaeta, sheta = supy.steps.histos.absEta, supy.steps.histos.eta
         stepsList = [
             supy.steps.printer.progressPrinter(),
-            supy.steps.histos.value('n_jets',20, 0, 20),
-            supy.steps.histos.value('top_ene',20,0,1e4),
-            #supy.steps.histos.energy("top_P4", 20,0,1e4), # just to verify that P4 is consistent with ntuple
-            supy.steps.histos.pt("top_P4", 100,1,201),
-            supy.steps.histos.pt("jet_P4", 100,1,201, indices = 'Indicesjet_'),
-            supy.steps.histos.eta("top_P4", 100,-10,10),
-            supy.steps.histos.eta("antitop_P4", 100,-10,10),
-            supy.steps.histos.absEta("top_P4", 100,10,10),
-            supy.steps.histos.absEta("antitop_P4", 100,10,10),
-            supy.steps.histos.pt('TtbarP4', 50,0,+0.05e-4),
-            supy.steps.histos.mass('TtbarP4', 100,0,2e3),
-            #supy.steps.printer.printstuff(['BoostZ']),
-            supy.steps.histos.value('BoostZ',100, -1, +1),
-            supy.steps.histos.value('DeltaAbsRapidities',50, -3, +3),
-            steps.histos.DeltaAbsYHisto(),
+            shv('n_jets',20, 0, 20),
+            shv('top_ene',20,0,1e4),
+            shpt("top_P4", 100,1,201),
+            shpt("jet_P4", 100,1,201, indices = 'Indicesjet_'),
+            sheta("top_P4", 100,-10,10),
+            sheta("antitop_P4", 100,-10,10),
+            shaeta("top_P4", 100,10,10),
+            shaeta("antitop_P4", 100,10,10),
+            shpt('TtbarP4', 50,0,+0.05e-4),
+            shmass('TtbarP4', 100,0,2e3),
+            shv('BoostZ',100, -1, +1),
+            shv('DeltaAbsRapidities',50, -3, +3),
             ]
-        stepsList += [steps.histos.DeltaAbsYHisto(bm, bM)
-                      for bm,bM in [(i*0.2, (i+1)*0.2) for i in range(int(3./0.2))]]
+        dyh = steps.histos.DeltaAbsYHisto
+        stepsList += [dyh()]
+        stepsList += [dyh(bm, bM) for bm,bM in [(i*0.2, (i+1)*0.2)
+                                                for i in range(int(3./0.2))]]
         return stepsList
 
 
@@ -45,16 +47,17 @@ class basicExample(supy.analysis) :
 
 
     def listOfCalculables(self,config) :
+        kin = calculables.kinematic
         return ( supy.calculables.zeroArgs(supy.calculables) +
                  [supy.calculables.other.fixedValue('Two',2) ]
                  +[calculables.other.Indices(collection=("jet_",""))]
-                 +[calculables.kinematic.P4(collection = ("jet_",""))]
-                 +[calculables.kinematic.singleP4(collection = ("top_",""))]
-                 +[calculables.kinematic.singleP4(collection = ("antitop_",""))]
-                 +[calculables.kinematic.TtbarP4(),
-                   calculables.kinematic.AbsSumRapidities(),
-                   calculables.kinematic.DeltaAbsRapidities(),]
-                 +[calculables.kinematic.BoostZ()]
+                 +[kin.P4(collection = ("jet_",""))]
+                 +[kin.singleP4(collection = ("top_",""))]
+                 +[kin.singleP4(collection = ("antitop_",""))]
+                 +[kin.TtbarP4(),
+                   kin.AbsSumRapidities(),
+                   kin.DeltaAbsRapidities(),]
+                 +[kin.BoostZ()]
                  )
 
     def listOfSampleDictionaries(self) :
